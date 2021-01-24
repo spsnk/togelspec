@@ -23,6 +23,10 @@ tags:
     description: Togel System API
   - name: admin
     description: Administration operations
+security:
+  - apikeyAuth: []
+  - bearerAuth: []
+    apikeyAuth: []
 paths:
   /members:
     post:
@@ -51,6 +55,25 @@ paths:
           content: {}
         "400":
           $ref: "codes.yml#/response/400"
+        default:
+          $ref: "codes.yml#/response/default"
+    get:
+      operationId: self.get
+      tags:
+        - member
+      summary: Retrieve logged in member profile.
+      description: Retrieve self member basic profile information.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Member"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
         default:
           $ref: "codes.yml#/response/default"
   /members/{memberId}/verify:
@@ -93,8 +116,8 @@ paths:
       operationId: member.get
       tags:
         - member
-      summary: Retrieve member basic profile information.
-      description: Retrieve member profile.
+      summary: Retrieve member profile.
+      description: Retrieve specific member basic profile information.
       parameters:
         - name: memberId
           in: path
@@ -189,15 +212,21 @@ paths:
       tags: 
         - account
         - member
-      summary: 
-      description:
+      summary: Login action 
+      description: Logs in the user and returns an authorization token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: objects.yml#/requests/login
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "components.yml#/schemas/Token"
+                $ref: "objects.yml#/response/auth"
         "400":
           description: Bad request
           content: {}
@@ -207,3 +236,12 @@ paths:
             application/json:
               schema:
                 $ref: "components.yml#/schemas/Error"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    apikeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

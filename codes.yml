@@ -11,6 +11,7 @@ response:
       Location:
         schema:
           type: string
+    content: {}
   "204":
     description: No content
     content: {}
@@ -29,3 +30,6 @@ response:
         example:
           code: 401
           message: Unauthorized
+  "404":
+    description: Not found
+    content: {}

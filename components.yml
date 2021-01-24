@@ -61,24 +61,3 @@ schemas:
       round:
         type: integer
         format: int64
-  Token:
-    type: object
-    properties:
-      memberId:
-        type: integer
-      auth:
-        type: string
-        format: token
-  securitySchemes:
-    togel_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: http://togel.pridosandbox.com/oauth/dialog
-          scopes:
-            write:member: modify your account and make bets
-            read:member: read members
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
