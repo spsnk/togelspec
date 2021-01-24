@@ -1,0 +1,84 @@
+schemas:
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+  Member:
+    type: object
+    required:
+      - username
+      - password
+      - phone_number
+      - email
+    properties:
+      member_id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+        pattern: "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\.0-9]*$"
+      email:
+        type: string
+        pattern: '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
+      credit:
+        type: number
+      released_bonus:
+        type: number
+      unreleased_bonus:
+        type: number
+      outstanding_bet:
+        type: number
+      last_login:
+        type: string
+        format: date-time
+  Bet:
+    type: object
+    properties:
+      bet_id:
+        type: integer
+        format: int64
+      market_id:
+        type: integer
+      market:
+        type: string
+      game_id:
+        type: integer
+      game:
+        type: string
+      selection:
+        type: string
+      amount:
+        type: number
+      result:
+        type: integer
+      round:
+        type: integer
+        format: int64
+  Token:
+    type: object
+    properties:
+      memberId:
+        type: integer
+      auth:
+        type: string
+        format: token
+  securitySchemes:
+    togel_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://togel.pridosandbox.com/oauth/dialog
+          scopes:
+            write:member: modify your account and make bets
+            read:member: read members
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header

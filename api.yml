@@ -1,0 +1,209 @@
+openapi: 3.0.1
+info:
+  title: Yoga Togel API
+  description: "Yoga Togel API"
+  termsOfService: ""
+  contact:
+    email: webmaster@yogatogel.net
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.2.0
+servers:
+  - url: https://togel.pridosandbox.com/v0
+tags:
+  - name: account
+    description: Account operations
+  - name: member
+    description: Member operations
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: togel
+    description: Togel System API
+  - name: admin
+    description: Administration operations
+paths:
+  /members:
+    post:
+      operationId: member.create
+      tags:
+        - member
+        - account
+      summary: Enroll a new member
+      description: Registers a new member in the system. 
+        Sends email with verification code. 
+        Sets member as inactive until verification is complete.
+      requestBody:
+        description: Member object to be enrolled.
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/Member"
+        required: true
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+          content: {}
+        "400":
+          $ref: "codes.yml#/response/400"
+        default:
+          $ref: "codes.yml#/response/default"
+  /members/{memberId}/verify:
+    post:
+      operationId: member.verify
+      tags:
+        - member
+      summary: Verify a member with special code.
+      description: Confirm a member given a verification code.
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Object containing the code for verification.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+      responses:
+        "204":
+          description: Verified
+          content: {}
+        "400":
+          description: Bad Request
+          content: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Error"
+  /members/{memberId}:
+    get:
+      operationId: member.get
+      tags:
+        - member
+      summary: Retrieve member basic profile information.
+      description: Retrieve member profile.
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Member"
+        "400":
+          description: Bad Request
+          content: {}
+        "404":
+          description: Member not found
+          content: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Error"
+  /members/{memberId}/bets:
+    get:
+      operationId: member.bets.get
+      tags:
+        - member
+        - togel
+      summary: Retrieve specific member bet list
+      description: Retreive bet list
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Bet"
+        "400":
+          description: Bad Request
+          content: {}
+        "404":
+          description: Member not found
+          content: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Error"
+  /members/winners:
+    get:
+      operationId: member.winners.get
+      tags:
+        - member
+      summary: Retrieve latest winnerss
+      description: Retrieve latest winners
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Member"
+        "400":
+          description: Bad Request
+          content: {}
+        "404":
+          description: Member not found
+          content: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Error"
+  /members/login:
+    post:
+      operationId: member.login.post
+      tags: 
+        - account
+        - member
+      summary: 
+      description:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Token"
+        "400":
+          description: Bad request
+          content: {}
+        "401":
+          description: Unauthorized
+          content: 
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Error"
