@@ -19,24 +19,22 @@ tags:
     externalDocs:
       description: Find out more
       url: http://swagger.io
-  - name: togel
-    description: Togel System API
   - name: admin
     description: Administration operations
+  - name: togel
+    description: Togel System API
 security:
-  - apikeyAuth: []
   - bearerAuth: []
-    apikeyAuth: []
 paths:
   /members:
     post:
+      security: []
       operationId: member.create
       tags:
-        - member
         - account
       summary: Enroll a new member
-      description: Registers a new member in the system. 
-        Sends email with verification code. 
+      description: Registers a new member in the system.
+        Sends email with verification code.
         Sets member as inactive until verification is complete.
       requestBody:
         description: Member object to be enrolled.
@@ -76,11 +74,12 @@ paths:
           $ref: "codes.yml#/response/404"
         default:
           $ref: "codes.yml#/response/default"
-  /members/{memberId}/verify:
-    post:
+  /members/{memberId}/verify/{code}:
+    get:
+      security: []
       operationId: member.verify
       tags:
-        - member
+        - account
       summary: Verify a member with special code.
       description: Confirm a member given a verification code.
       parameters:
@@ -89,34 +88,83 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        description: Object containing the code for verification.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                code:
-                  type: string
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+            format: UUID
       responses:
         "204":
           description: Verified
           content: {}
         "400":
-          description: Bad Request
-          content: {}
+          $ref: "codes.yml#/response/400"
         default:
           description: Unexpected error
           content:
             application/json:
               schema:
                 $ref: "components.yml#/schemas/Error"
-  /members/{memberId}:
+  /members/login:
+    post:
+      security: []
+      operationId: member.login.post
+      tags:
+        - account
+      summary: Login action
+      description: Logs in the user and returns an authorization token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: objects.yml#/requests/login
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "objects.yml#/response/auth"
+        "400":
+          description: Bad request
+          content: {}
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Error"
+  /members/bets:
     get:
-      operationId: member.get
+      operationId: member.bet.get
       tags:
         - member
-      summary: Retrieve member profile.
+      summary: Retrieve logged in member bets.
+      description: List the active bets of the logged in user (market has not closed) and the last 10 bets of closed markets.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Bet"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        default:
+          $ref: "codes.yml#/response/default"
+
+  /members/{memberId}:
+    get:
+      operationId: admin.member.get
+      tags:
+        - admin
+      summary: Retrieve specific member profile.
       description: Retrieve specific member basic profile information.
       parameters:
         - name: memberId
@@ -145,10 +193,9 @@ paths:
                 $ref: "components.yml#/schemas/Error"
   /members/{memberId}/bets:
     get:
-      operationId: member.bets.get
+      operationId: admin.member.bets.get
       tags:
-        - member
-        - togel
+        - admin
       summary: Retrieve specific member bet list
       description: Retreive bet list
       parameters:
@@ -167,17 +214,11 @@ paths:
                 items:
                   $ref: "components.yml#/schemas/Bet"
         "400":
-          description: Bad Request
-          content: {}
+          $ref: "codes.yml#/response/400"
         "404":
-          description: Member not found
-          content: {}
+          $ref: "codes.yml#/response/404"
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "components.yml#/schemas/Error"
+          $ref: "codes.yml#/response/default"
   /members/winners:
     get:
       operationId: member.winners.get
@@ -206,36 +247,7 @@ paths:
             application/json:
               schema:
                 $ref: "components.yml#/schemas/Error"
-  /members/login:
-    post:
-      operationId: member.login.post
-      tags: 
-        - account
-        - member
-      summary: Login action 
-      description: Logs in the user and returns an authorization token.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: objects.yml#/requests/login
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "objects.yml#/response/auth"
-        "400":
-          description: Bad request
-          content: {}
-        "401":
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                $ref: "components.yml#/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
