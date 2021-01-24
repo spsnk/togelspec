@@ -8,9 +8,9 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.2.0
+  version: 1.0.0
 servers:
-  - url: https://togel.pridosandbox.com/v0
+  - url: https://togel.pridosandbox.com/v1
 tags:
   - name: account
     description: Account operations
@@ -41,7 +41,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "components.yml#/schemas/Member"
+              $ref: "components.yml#/schemas/MemberCreate"
         required: true
       responses:
         "201":
