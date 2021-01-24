@@ -13,9 +13,11 @@ servers:
   - url: https://togel.pridosandbox.com/v1
 tags:
   - name: account
-    description: Account operations
+    description: Account operations, register new member, enroll and verify.
+      These endpoints are to be called by non authenthicated users.
   - name: member
-    description: Member operations
+    description: Member operations, related to logged in user.
+      Should always use a Bearer token for authorization.
     externalDocs:
       description: Find out more
       url: http://swagger.io
