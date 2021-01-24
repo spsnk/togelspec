@@ -158,7 +158,6 @@ paths:
           $ref: "codes.yml#/response/404"
         default:
           $ref: "codes.yml#/response/default"
-
   /members/{memberId}:
     get:
       operationId: admin.member.get
