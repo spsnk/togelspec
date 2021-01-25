@@ -50,6 +50,7 @@ paths:
           description: Created
           headers:
             Location:
+              description: Returns an url of the type /members/{memberId}, confirming the creation.
               schema:
                 type: string
           content: {}

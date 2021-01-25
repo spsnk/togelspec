@@ -53,6 +53,7 @@ schemas:
         type: string
       password:
         type: string
+        pattern: "(?=.{8,})"
       phone_number:
         type: string
         pattern: "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\.0-9]*$"
