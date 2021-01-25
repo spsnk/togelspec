@@ -45,6 +45,9 @@ schemas:
       - password
       - phone_number
       - email
+      - bank
+      - bank_account_holder
+      - bank_account_number
     properties:
       username:
         type: string
@@ -56,6 +59,14 @@ schemas:
       email:
         type: string
         pattern: '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
+      bank:
+        type: string
+      bank_account_holder:
+        type: string
+      bank_account_number:
+        type: string
+      referral:
+        type: string
   Bet:
     type: object
     properties:
