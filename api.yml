@@ -26,7 +26,7 @@ tags:
   - name: togel
     description: Togel System API
 security:
-  - bearerAuth: []
+  - Token: []
 paths:
   /members:
     post:
@@ -252,10 +252,10 @@ paths:
 
 components:
   securitySchemes:
-    bearerAuth:
+    Token:
       type: http
       scheme: bearer
-    apikeyAuth:
+    Apikey:
       type: apiKey
       in: header
       name: X-API-Key
