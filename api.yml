@@ -275,7 +275,7 @@ paths:
       tags:
         - catalog
       summary: Retrieve the available markets.
-      description: Returns a list of available markets with the available games for displaying on frontend.
+      description: Returns a list of available markets with the available games for displaying on frontend. Cache this response for half an hour.
       responses:
         "200":
           description: OK
