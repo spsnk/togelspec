@@ -1,16 +1,30 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
   title: Yoga Togel API
-  description: "Yoga Togel API"
-  termsOfService: ""
+  description: Latest changes
+
+
+    Version 1.1.0
+
+    - Added catalogs.banks
+
+    - Added catalogs.markets
+
+  termsOfService: /tos
   contact:
     email: webmaster@yogatogel.net
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
+  version: 1.1.0
 servers:
   - url: https://togel.pridosandbox.com/v1
+    description: Development server for testing.
+  - url: https://api.togel.com/v1
+    description: Production server. Domain TBD.
+externalDocs:
+  url: /docs
+  description: Find database diagrams and more info here.
 tags:
   - name: catalog
     description: Catalogs. No security.
@@ -20,9 +34,6 @@ tags:
   - name: member
     description: Member operations, related to logged in user.
       Should always use a Bearer token for authorization.
-    externalDocs:
-      description: Find out more
-      url: http://swagger.io
   - name: admin
     description: Administration operations
   - name: togel
