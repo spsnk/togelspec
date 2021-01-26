@@ -12,7 +12,7 @@ info:
 
     - Added API key authentication to admin.
 
-  termsOfService: /tos
+  termsOfService: https://pridosandbox.com/tos
   contact:
     email: webmaster@yogatogel.net
   license:
@@ -25,7 +25,7 @@ servers:
   - url: https://api.togel.com/v1
     description: Production server. Domain TBD.
 externalDocs:
-  url: /docs
+  url: https://pridosandbox.com/docs
   description: Find database diagrams and more info here.
 tags:
   - name: catalog
