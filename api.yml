@@ -12,6 +12,8 @@ info:
 servers:
   - url: https://togel.pridosandbox.com/v1
 tags:
+  - name: catalog
+    description: Catalogs. No security.
   - name: account
     description: Account operations, register new member, enroll and verify.
       These endpoints are to be called by non authenthicated users.
@@ -238,18 +240,51 @@ paths:
                 items:
                   $ref: "components.yml#/schemas/Member"
         "400":
-          description: Bad Request
-          content: {}
+          $ref: "codes.yml#/response/400"
         "404":
-          description: Member not found
-          content: {}
+          $ref: "codes.yml#/response/404"
         default:
-          description: Unexpected error
+          $ref: "codes.yml#/response/default"
+  /catalogs/banks:
+    get:
+      security: []
+      operationId: catalog.banks
+      tags:
+        - catalog
+      summary: Retrieve the available banks.
+      description: Gets a list of available banks for displaying on frontend.
+      responses:
+        "200":
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "components.yml#/schemas/Error"
-
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Bank"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        default:
+          $ref: "codes.yml#/response/default"
+  /catalogs/markets:
+    get:
+      security: []
+      operationId: catalog.markets
+      tags:
+        - catalog
+      summary: Retrieve the available markets.
+      description: Returns a list of available markets with the available games for displaying on frontend.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Market"
 components:
   securitySchemes:
     Token:

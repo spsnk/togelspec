@@ -14,7 +14,7 @@ schemas:
       - phone_number
       - email
     properties:
-      member_id:
+      id:
         type: integer
         format: int64
       username:
@@ -60,18 +60,81 @@ schemas:
       email:
         type: string
         pattern: '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
-      bank:
-        type: string
+      bank_id:
+        type: integer
       bank_account_holder:
         type: string
       bank_account_number:
         type: string
       referral:
         type: string
+  Bank:
+    type: object
+    properties:
+      bank_id:
+        type: integer
+      bank_name:
+        type: string
+  Market:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      shortname:
+        type: string
+      url:
+        type: string
+      opendays:
+        type: integer
+      close:
+        type: string
+        format: date-time
+      draw:
+        type: string
+        format: date-time
+      games:
+        type: object
+        description: The key should be <game_type>.
+        additionalProperties:
+          $ref: "#/schemas/Game"
+        example:
+          xd:
+            id: 1
+            type: xd
+            discount: 0.10
+            fee: 0.0
+          2df:
+            id: 2
+            type: 2df
+            discount: 0.0
+            fee: 0.10
+          2dm:
+            id: 3
+            type: 2dm
+            discount: 0.0
+            fee: 0.0
+          free:
+            id: 4
+            type: free
+            discount: 0.05
+            fee: 0.0
+  Game:
+    type: object
+    properties:
+      id:
+        type: integer
+      type:
+        type: string
+      discount:
+        type: number
+      fee:
+        type: number
   Bet:
     type: object
     properties:
-      bet_id:
+      id:
         type: integer
         format: int64
       market_id:
