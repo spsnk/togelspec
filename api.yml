@@ -4,11 +4,13 @@ info:
   description: Latest changes
 
 
-    Version 1.1.0
+    Version 1.2.0
 
     - Added catalogs.banks
 
     - Added catalogs.markets
+
+    - Added API key authentication to admin.
 
   termsOfService: /tos
   contact:
@@ -16,7 +18,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.1.0
+  version: 1.2.0
 servers:
   - url: https://togel.pridosandbox.com/v1
     description: Development server for testing.
@@ -176,6 +178,9 @@ paths:
           $ref: "codes.yml#/response/default"
   /members/{memberId}:
     get:
+      security:
+        - Token: []
+          Apikey: []
       operationId: admin.member.get
       tags:
         - admin
@@ -208,6 +213,9 @@ paths:
                 $ref: "components.yml#/schemas/Error"
   /members/{memberId}/bets:
     get:
+      security:
+        - Token: []
+          Apikey: []
       operationId: admin.member.bets.get
       tags:
         - admin
