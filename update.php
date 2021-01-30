@@ -1,24 +1,28 @@
 <?php
 
-/*
- * Endpoint for Github Webhook URLs
- *
- * see: https://help.github.com/articles/post-receive-hooks
- *
- */
 
 // script errors will be send to this email:
 $error_mail = "salvador.paz.santos+alpha@gmail.com";
 function run()
 {
-  global $rawInput;
 
-  // read config.json
-  $config_filename = 'config.json';
-  if (!file_exists($config_filename)) {
-    throw new Exception("Can't find " . $config_filename);
-  }
-  $config = json_decode(file_get_contents($config_filename), true);
+  // Config
+  $config = [
+    "email" => [
+      "from" => "github-webhook@pridosandbox.com",
+      "to" => "salvador.paz.santos+yogaspec@gmail.com",
+      "send" => false
+    ],
+    "endpoints" => [
+      [
+        "repo" => "spsnk/togelspec",
+        "branch" => "main",
+        "action" => "Spec updated",
+        "run" => "/home/pridosandbox/scripts/update-spec.sh"
+      ]
+    ],
+    "sekyot" => "f01726d9-44b7-4392-8115-0e56a1995c06"
+  ];
 
   $postBody = $_POST['payload'];
   $payload = json_decode($postBody);
@@ -30,9 +34,6 @@ function run()
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
   }
 
-  // check if the request comes from github server
-  // $github_ips = array('207.97.227.253', '50.57.128.197', '108.171.174.178', '50.57.231.61');
-  // if (in_array($_SERVER['REMOTE_ADDR'], $github_ips)) {
   foreach ($config['endpoints'] as $endpoint) {
     // check if the push came from the right repository and branch
     if (
@@ -44,8 +45,9 @@ function run()
       ob_start();
       passthru($endpoint['run']);
       $output = ob_get_contents();
+      ob_end_clean();
+      echo $output;
       // prepare and send the notification email
-      if (isset($config['email'])) {
         // send mail to someone, and the github user who pushed the commit
         $body = '<p>The Github user <a href="https://github.com/'
           . $payload->pusher->name . '">@' . $payload->pusher->name . '</a>'
@@ -68,14 +70,12 @@ function run()
         $body .= $output . '</pre>';
         $body .= '<p>Cheers, <br/>Github Webhook Endpoint</p>';
 
+      if (isset($config['email']) && $config['email']['send']) {
         mail($config['email']['to'], $endpoint['action'], $body, $headers);
       }
       return true;
     }
   }
-  // } else {
-  //     throw new Exception("This does not appear to be a valid requests from Github.\n");
-  // }
 }
 
 try {
