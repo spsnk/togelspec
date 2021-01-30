@@ -43,10 +43,10 @@ function run()
 
       // execute update script, and record its output
       ob_start();
+      echo "Running ". $endpoint['run'] . "\n";
       passthru($endpoint['run']);
       $output = ob_get_contents();
       ob_end_clean();
-      echo $output;
       // prepare and send the notification email
         // send mail to someone, and the github user who pushed the commit
         $body = '<p>The Github user <a href="https://github.com/'
