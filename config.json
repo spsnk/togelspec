@@ -1,0 +1,14 @@
+{
+  "email": {
+    "from": "github-hook@yogatogel.com",
+    "to": "salvador.paz.santos+yogaspec@gmail.com"
+  },
+  "endpoints": [
+    {
+      "repo": "spsnk/togelspec",
+      "branch": "main",
+      "action": "something has been changed on the spec",
+      "run": "/home/pridosandbox/scripts/update-spec.sh"
+    }
+  ]
+}

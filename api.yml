@@ -4,6 +4,11 @@ info:
   description: Latest changes
 
 
+    Version 1.2.1
+
+    - Moved /members/winners to catalogs.
+
+
     Version 1.2.0
 
     - Added catalogs.banks
@@ -18,7 +23,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.2.0
+  version: 1.2.1
 servers:
   - url: https://togel.pridosandbox.com/v1
     description: Development server for testing.
@@ -242,28 +247,6 @@ paths:
           $ref: "codes.yml#/response/404"
         default:
           $ref: "codes.yml#/response/default"
-  /members/winners:
-    get:
-      operationId: member.winners.get
-      tags:
-        - member
-      summary: Retrieve latest winnerss
-      description: Retrieve latest winners
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "components.yml#/schemas/Member"
-        "400":
-          $ref: "codes.yml#/response/400"
-        "404":
-          $ref: "codes.yml#/response/404"
-        default:
-          $ref: "codes.yml#/response/default"
   /catalogs/banks:
     get:
       security: []
@@ -304,6 +287,29 @@ paths:
                 type: array
                 items:
                   $ref: "components.yml#/schemas/Market"
+  /members/winners:
+    get:
+      security: []
+      operationId: member.winners.get
+      tags:
+        - catalog
+      summary: Retrieve latest winnerss
+      description: Retrieve latest winners
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Member"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        default:
+          $ref: "codes.yml#/response/default"
 components:
   securitySchemes:
     Token:
