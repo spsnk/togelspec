@@ -38,6 +38,16 @@ schemas:
       last_login:
         type: string
         format: date-time
+      bank_id:
+        type: integer
+      bank_name:
+        type: integer
+      bank_account_holder:
+        type: string
+      bank_account_number:
+        type: string
+      referral:
+        type: string
   MemberCreate:
     type: object
     required:

@@ -2,7 +2,7 @@
 
 
 // script errors will be send to this email:
-$error_mail = "salvador.paz.santos+alpha@gmail.com";
+$error_mail = "salvador.paz.santos+webhookerror@gmail.com";
 function run()
 {
 
@@ -10,15 +10,24 @@ function run()
   $config = [
     "email" => [
       "from" => "github-webhook@pridosandbox.com",
-      "to" => "salvador.paz.santos+yogaspec@gmail.com",
-      "send" => false
+      "to" => [
+        "salvador.paz.santos+yogaspec@gmail.com"
+      ]
     ],
     "endpoints" => [
       [
         "repo" => "spsnk/togelspec",
         "branch" => "main",
         "action" => "Spec updated",
-        "run" => "/home/pridosandbox/scripts/update-spec.sh"
+        "run" => "/home/pridosandbox/scripts/update-spec.sh",
+        "send_email" => false
+      ],
+      [
+        "repo" => "spsnk/yogatogel-api",
+        "branch" => "main",
+        "action" => "API updated",
+        "run" => "/home/pridosandbox/scripts/update-api.sh",
+        "send_email" => true
       ]
     ],
     "sekyot" => "f01726d9-44b7-4392-8115-0e56a1995c06"
@@ -42,8 +51,15 @@ function run()
     ) {
 
       // execute update script, and record its output
-      ob_start();
+      echo "Starting deploy...";
       echo "Running " . $endpoint['run'] . "\n";
+      header('Connection: close');
+      header('Content-Length: ' . ob_get_length());
+      ob_end_flush();
+      ob_flush();
+      flush();
+      ob_start();
+      fastcgi_finish_request();
       passthru($endpoint['run']);
       $output = ob_get_contents();
       ob_end_clean();
@@ -69,11 +85,15 @@ function run()
       $body .= '<p>What follows is the output of the script:</p><pre>';
       $body .= $output . '</pre>';
       $body .= '<p>Cheers, <br/>Github Webhook Endpoint</p>';
-      echo $body;
-      if (isset($config['email']) && $config['email']['send']) {
-        mail($config['email']['to'], $endpoint['action'], $body, $headers);
+      echo $output;
+      if (isset($config['email']) && $endpoint['send_email']) {
+        foreach ($config['email']['to'] as $mail_to) {
+          mail($mail_to, $endpoint['action'], $body, $headers);
+        }
       }
       return true;
+    } else {
+      echo "Hmm.. that doesnt look like a valid request...";
     }
   }
 }
