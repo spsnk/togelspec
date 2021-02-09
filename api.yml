@@ -4,6 +4,11 @@ info:
   description: Latest changes
 
 
+    Version 1.2.2
+
+    - Added admin login and logout
+
+
     Version 1.2.1
 
     - Moved /members/winners to catalogs.
@@ -181,6 +186,133 @@ paths:
           $ref: "codes.yml#/response/404"
         default:
           $ref: "codes.yml#/response/default"
+
+  /catalogs/banks:
+    get:
+      security: []
+      operationId: catalog.banks
+      tags:
+        - catalog
+      summary: Retrieve the available banks.
+      description: Gets a list of available banks for displaying on frontend.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Bank"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        default:
+          $ref: "codes.yml#/response/default"
+  /catalogs/markets:
+    get:
+      security: []
+      operationId: catalog.markets
+      tags:
+        - catalog
+      summary: Retrieve the available markets.
+      description: Returns a list of available markets with the available games for displaying on frontend. Cache this response for half an hour.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Market"
+  /members/winners:
+    get:
+      security: []
+      operationId: member.winners.get
+      tags:
+        - catalog
+      summary: Retrieve latest winnerss
+      description: Retrieve latest winners
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Member"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        default:
+          $ref: "codes.yml#/response/default"
+  /administrators/login:
+    post:
+      security:
+        - Apikey: []
+      operationId: admin.login.post
+      tags:
+        - admin
+      summary: Login action for admin
+      description: Logs in the admin and returns an authorization token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: objects.yml#/requests/login
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "objects.yml#/response/auth"
+        "400":
+          description: Bad request
+          content: {}
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Error"
+  /administrators/logout:
+    post:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.logout.post
+      tags:
+        - admin
+      summary: Login action for admin
+      description: Logs in the admin and returns an authorization token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: objects.yml#/requests/login
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "objects.yml#/response/auth"
+        "400":
+          description: Bad request
+          content: {}
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Error"
   /members/{memberId}:
     get:
       security:
@@ -241,69 +373,6 @@ paths:
                 type: array
                 items:
                   $ref: "components.yml#/schemas/Bet"
-        "400":
-          $ref: "codes.yml#/response/400"
-        "404":
-          $ref: "codes.yml#/response/404"
-        default:
-          $ref: "codes.yml#/response/default"
-  /catalogs/banks:
-    get:
-      security: []
-      operationId: catalog.banks
-      tags:
-        - catalog
-      summary: Retrieve the available banks.
-      description: Gets a list of available banks for displaying on frontend.
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "components.yml#/schemas/Bank"
-        "400":
-          $ref: "codes.yml#/response/400"
-        "404":
-          $ref: "codes.yml#/response/404"
-        default:
-          $ref: "codes.yml#/response/default"
-  /catalogs/markets:
-    get:
-      security: []
-      operationId: catalog.markets
-      tags:
-        - catalog
-      summary: Retrieve the available markets.
-      description: Returns a list of available markets with the available games for displaying on frontend. Cache this response for half an hour.
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "components.yml#/schemas/Market"
-  /members/winners:
-    get:
-      security: []
-      operationId: member.winners.get
-      tags:
-        - catalog
-      summary: Retrieve latest winnerss
-      description: Retrieve latest winners
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "components.yml#/schemas/Member"
         "400":
           $ref: "codes.yml#/response/400"
         "404":
