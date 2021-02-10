@@ -6,7 +6,7 @@ info:
 
     Version 1.2.2
 
-    - Added admin login and logout
+    - Added staff login and logout
 
 
     Version 1.2.1
@@ -250,7 +250,7 @@ paths:
           $ref: "codes.yml#/response/404"
         default:
           $ref: "codes.yml#/response/default"
-  /administrators/login:
+  /staff/login:
     post:
       security:
         - Apikey: []
@@ -281,7 +281,7 @@ paths:
             application/json:
               schema:
                 $ref: "components.yml#/schemas/Error"
-  /administrators/logout:
+  /staff/logout:
     post:
       security:
         - Apikey: []
