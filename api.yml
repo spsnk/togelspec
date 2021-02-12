@@ -35,7 +35,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.2.2
+  version: 1.2.3
 servers:
   - url: https://togel.pridosandbox.com/api
     description: Development server for testing.
