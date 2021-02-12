@@ -4,6 +4,13 @@ info:
   description: Latest changes
 
 
+    Version 1.2.3
+
+    - Normalized catalogs with REST
+
+    - Added GameType creation and catalog
+
+
     Version 1.2.2
 
     - Added staff login and logout
@@ -30,7 +37,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.2.2
 servers:
-  - url: https://togel.pridosandbox.com/v1
+  - url: https://togel.pridosandbox.com/api
     description: Development server for testing.
   - url: https://api.togel.com/v1
     description: Production server. Domain TBD.
@@ -72,13 +79,7 @@ paths:
         required: true
       responses:
         "201":
-          description: Created
-          headers:
-            Location:
-              description: Returns an url of the type /members/{memberId}, confirming the creation.
-              schema:
-                type: string
-          content: {}
+          $ref: "codes.yml#/response/201"
         "400":
           $ref: "codes.yml#/response/400"
         default:
@@ -187,7 +188,7 @@ paths:
         default:
           $ref: "codes.yml#/response/default"
 
-  /catalogs/banks:
+  /banks:
     get:
       security: []
       operationId: catalog.banks
@@ -210,7 +211,7 @@ paths:
           $ref: "codes.yml#/response/404"
         default:
           $ref: "codes.yml#/response/default"
-  /catalogs/markets:
+  /markets:
     get:
       security: []
       operationId: catalog.markets
@@ -373,6 +374,53 @@ paths:
                 type: array
                 items:
                   $ref: "components.yml#/schemas/Bet"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        default:
+          $ref: "codes.yml#/response/default"
+  /games/types:
+    post:
+      security:
+        - Token: []
+          Apikey: []
+      operationId: admin.game.type.create
+      tags:
+        - admin
+      summary: Adds a new game type to the catalog.
+      description: Adds a new game type to be used on Game creation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: objects.yml#/requests/createGameType
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        default:
+          $ref: "codes.yml#/response/default"
+    get:
+      security: []
+      operationId: catalogs.game.types
+      tags:
+        - catalog
+      summary: Retrieve the available games.
+      description: Returns a list of available markets with the available game types for displaying on frontend. Cache this response for a week.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/GameType"
         "400":
           $ref: "codes.yml#/response/400"
         "404":

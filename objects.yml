@@ -9,6 +9,8 @@ requests:
     required:
       - username
       - password
+  createGameType:
+    $ref: "components.yml#/schemas/GameTypeCreate"
 response:
   auth:
     type: object

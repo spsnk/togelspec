@@ -162,3 +162,26 @@ schemas:
       round:
         type: integer
         format: int64
+  GameTypeCreate:
+    type: object
+    properties:
+      gametype_id:
+        type: string
+      game_name:
+        type: string
+    required:
+      - gametype_id
+      - game_name
+  GameType:
+    allOf:
+      - $ref: "#/schemas/GameTypeCreate"
+      - $ref: "#/schemas/_Timestamp"
+  _Timestamp:
+    type: object
+    properties:
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time

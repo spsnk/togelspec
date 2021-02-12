@@ -9,6 +9,7 @@ response:
     description: Created
     headers:
       Location:
+        description: Returns an url of the type /resource/{resourceId}, confirming the creation.
         schema:
           type: string
     content: {}
@@ -17,7 +18,7 @@ response:
     content: {}
   "400":
     description: Bad request
-    content: 
+    content:
       application/json:
         schema:
           $ref: "components.yml#/schemas/Error"
