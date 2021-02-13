@@ -83,6 +83,15 @@ schemas:
         type: integer
       bank_name:
         type: string
+      bank_shortname:
+        type: string
+  BankCreate:
+    type: object
+    properties:
+      bank_name:
+        type: string
+      bank_shortname:
+        type: string
   Market:
     type: object
     properties:

@@ -1,7 +1,12 @@
 openapi: 3.0.3
 info:
   title: Yoga Togel API
-  description: Latest changes
+  description: <b>Latest changes</b>
+
+
+    Version 1.2.4
+
+    - Added bank.create
 
 
     Version 1.2.3
@@ -35,7 +40,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.2.3
+  version: 1.2.4
 servers:
   - url: https://togel.pridosandbox.com/api
     description: Development server for testing.
@@ -189,6 +194,31 @@ paths:
           $ref: "codes.yml#/response/default"
 
   /banks:
+    post:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.banks.create
+      tags:
+        - admin
+      summary: Create new Bank
+      description: Creates new Bank
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: objects.yml#/requests/createBank
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        default:
+          $ref: "codes.yml#/response/default"
+
     get:
       security: []
       operationId: catalog.banks
