@@ -67,6 +67,106 @@ tags:
 security:
   - Token: []
 paths:
+  /members/login:
+    post:
+      security: []
+      operationId: member.login
+      tags:
+        - account
+      summary: Login action for member
+      description: Logs in the user and returns an authorization token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: objects.yml#/requests/login
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "objects.yml#/response/auth"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /members/logout:
+    post:
+      security:
+        - Token: []
+      operationId: member.logout
+      tags:
+        - account
+      summary: Logout action for member
+      description: Logs out the member and revokes the previous auth token.
+      responses:
+        "204":
+          $ref: "codes.yml#/response/204"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /staff/login:
+    post:
+      security:
+        - Apikey: []
+      operationId: admin.login.post
+      tags:
+        - admin
+      summary: Login action for admin
+      description: Logs in the admin and returns an authorization token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: objects.yml#/requests/login
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "objects.yml#/response/auth"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /staff/logout:
+    post:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.logout
+      tags:
+        - admin
+      summary: Logout action for admin
+      description: Logs out the admin and revokes the previous authorization token.
+      responses:
+        "204":
+          $ref: "codes.yml#/response/204"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
   /members:
     post:
       security: []
@@ -89,10 +189,16 @@ paths:
           $ref: "codes.yml#/response/201"
         "400":
           $ref: "codes.yml#/response/400"
-        default:
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
           $ref: "codes.yml#/response/default"
     get:
-      operationId: self.get
+      operationId: self.profile
       tags:
         - member
       summary: Retrieve logged in member profile.
@@ -106,9 +212,30 @@ paths:
                 $ref: "components.yml#/schemas/Member"
         "400":
           $ref: "codes.yml#/response/400"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+    patch:
+      operationId: self.update
+      tags:
+        - member
+      summary: Modifies the logged in member profile.
+      description: Modifies the logged in member information, bank information, referral, email (needs to trigger verification again), etc.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/Member"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
         "404":
           $ref: "codes.yml#/response/404"
-        default:
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
           $ref: "codes.yml#/response/default"
   /members/{memberId}/verify/{code}:
     get:
@@ -136,45 +263,17 @@ paths:
           content: {}
         "400":
           $ref: "codes.yml#/response/400"
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "components.yml#/schemas/Error"
-  /members/login:
-    post:
-      security: []
-      operationId: member.login.post
-      tags:
-        - account
-      summary: Login action
-      description: Logs in the user and returns an authorization token.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: objects.yml#/requests/login
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "objects.yml#/response/auth"
-        "400":
-          description: Bad request
-          content: {}
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "components.yml#/schemas/Error"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
+          $ref: "codes.yml#/response/default"
   /members/bets:
     get:
-      operationId: member.bet.get
+      operationId: member.bet.history
       tags:
         - member
       summary: Retrieve logged in member bets.
@@ -187,14 +286,52 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "components.yml#/schemas/Bet"
+                  $ref: "components.yml#/schemas/Ticket"
         "400":
           $ref: "codes.yml#/response/400"
         "404":
           $ref: "codes.yml#/response/404"
-        default:
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
           $ref: "codes.yml#/response/default"
+    post:
+      operationId: member.bet.create
+      tags:
+        - member
+      summary: Submit a bet for the current logged in user.
+      description:
+        Total cost of bets should be calculated and verified against credit so it doesnt exceed available credit on the user account.
 
+
+        The credit should substracted from user and submitting of the bet after all checks passed. Should be a Transactional operation.
+
+
+        Returns a 422 Insuficient Credit when there is not enough credit.
+
+
+        Should also check that no repeated Ticket.bets are submitted, with the same number and game_id.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "components.yml#/schemas/Ticket"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
+          $ref: "codes.yml#/response/default"
   /banks:
     post:
       security:
@@ -283,69 +420,7 @@ paths:
           $ref: "codes.yml#/response/404"
         default:
           $ref: "codes.yml#/response/default"
-  /staff/login:
-    post:
-      security:
-        - Apikey: []
-      operationId: admin.login.post
-      tags:
-        - admin
-      summary: Login action for admin
-      description: Logs in the admin and returns an authorization token.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: objects.yml#/requests/login
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "objects.yml#/response/auth"
-        "400":
-          description: Bad request
-          content: {}
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "components.yml#/schemas/Error"
-  /staff/logout:
-    post:
-      security:
-        - Apikey: []
-          Token: []
-      operationId: admin.logout.post
-      tags:
-        - admin
-      summary: Login action for admin
-      description: Logs in the admin and returns an authorization token.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: objects.yml#/requests/login
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "objects.yml#/response/auth"
-        "400":
-          description: Bad request
-          content: {}
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "components.yml#/schemas/Error"
+
   /members/{memberId}:
     get:
       security:

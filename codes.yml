@@ -1,6 +1,6 @@
 response:
   default:
-    description: Unexpected error
+    description: Unexpected Error
     content:
       application/json:
         schema:
@@ -14,10 +14,10 @@ response:
           type: string
     content: {}
   "204":
-    description: No content
+    description: No Content
     content: {}
   "400":
-    description: Bad request
+    description: Bad Request
     content:
       application/json:
         schema:
@@ -32,5 +32,11 @@ response:
           code: 401
           message: Unauthorized
   "404":
-    description: Not found
+    description: Not Found
+    content: {}
+  "405":
+    description: Method Not Allowed
+    content: {}
+  "409":
+    description: Conflict
     content: {}
