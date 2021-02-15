@@ -453,7 +453,7 @@ paths:
     post:
       security:
         - Token: []
-      operationId: member.transaction.deposit
+      operationId: member.transaction
       tags:
         - member
       requestBody:
@@ -932,7 +932,7 @@ paths:
       security:
         - Apikey: []
           Token: []
-      operationId: admin.bank.account.create
+      operationId: admin.bank.account.catalog
       tags:
         - admin
       summary: Retrieves a list of all the staff bank accounts
@@ -959,7 +959,7 @@ paths:
       security:
         - Apikey: []
           Token: []
-      operationId: admin.bank.account.create
+      operationId: admin.bank.account.get
       tags:
         - admin
       summary: Retrieves info for a specific staff bank account.
@@ -989,7 +989,7 @@ paths:
       security:
         - Apikey: []
           Token: []
-      operationId: admin.bank.account.create
+      operationId: admin.bank.account.update
       tags:
         - admin
       summary: Updates info for a specific staff bank account.
@@ -1016,7 +1016,7 @@ paths:
           $ref: "codes.yml#/response/405"
         "422":
           $ref: "codes.yml#/response/default"
-  /transactions/:
+  /transactions:
     get:
       security:
         - Apikey: []
@@ -1046,7 +1046,7 @@ paths:
       security:
         - Apikey: []
           Token: []
-      operationId: admin.transaction.catalog
+      operationId: admin.transaction.update
       tags:
         - admin
       parameters:
@@ -1076,7 +1076,7 @@ paths:
       security:
         - Apikey: []
           Token: []
-      operationId: admin.transaction.catalog
+      operationId: admin.transaction.get
       tags:
         - admin
       parameters:
