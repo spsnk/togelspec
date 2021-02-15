@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Yoga Togel API
+  title: YogaTogel API
   description: <b>Latest changes</b>
 
 
@@ -47,7 +47,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.3.0
+  version: 1.5.0
 servers:
   - url: https://togel.pridosandbox.com/api
     description: Staging environment.
@@ -66,7 +66,7 @@ tags:
       These endpoints are to be called by non authenthicated users.
   - name: member
     description: Member operations, related to logged in user.
-      Should always use a Bearer token for authorization.
+      Should always use a Bearer token for authorization. Such token contains user information, like member_id, username and status.
   - name: admin
     description: Administration operations
   - name: togel
@@ -174,6 +174,118 @@ paths:
           $ref: "codes.yml#/response/405"
         "422":
           $ref: "codes.yml#/response/default"
+  /staff:
+    post:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.staff.create
+      tags:
+        - admin
+      summary: Creates new staff
+      description: Creates new staff username
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/Staff"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
+          $ref: "codes.yml#/response/default"
+    get:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.staff.catalog
+      tags:
+        - admin
+      summary: Retrieves Staff Member
+      description: Retrieve self member basic profile information.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Member"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /staff/{staffId}:
+    get:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.staff.get
+      tags:
+        - admin
+      summary: Retrieve Specific staff info.
+      description: Retrieve Specific staff info.
+      parameters:
+        - name: staffId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Staff"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+    patch:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.staff.update
+      tags:
+        - admin
+      summary: Updates staff
+      description: Updates Staff
+      parameters:
+        - name: staffId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/Staff"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
+          $ref: "codes.yml#/response/default"
   /members:
     post:
       security: []
@@ -274,8 +386,6 @@ paths:
           $ref: "codes.yml#/response/404"
         "405":
           $ref: "codes.yml#/response/405"
-        "409":
-          $ref: "codes.yml#/response/409"
         "422":
           $ref: "codes.yml#/response/default"
   /members/bets:
@@ -339,6 +449,31 @@ paths:
           $ref: "codes.yml#/response/409"
         "422":
           $ref: "codes.yml#/response/default"
+  /members/transactions:
+    post:
+      security:
+        - Token: []
+      operationId: member.transaction.deposit
+      tags:
+        - member
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/TransactionCreate"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
+          $ref: "codes.yml#/response/default"
   /banks:
     post:
       security:
@@ -354,7 +489,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: objects.yml#/requests/createBank
+              $ref: "components.yml#/schemas/BankCreate"
       responses:
         "201":
           $ref: "codes.yml#/response/201"
@@ -362,9 +497,12 @@ paths:
           $ref: "codes.yml#/response/400"
         "404":
           $ref: "codes.yml#/response/404"
-        default:
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
           $ref: "codes.yml#/response/default"
-
     get:
       security: []
       operationId: catalog.banks
@@ -385,7 +523,74 @@ paths:
           $ref: "codes.yml#/response/400"
         "404":
           $ref: "codes.yml#/response/404"
-        default:
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /banks/{bankId}:
+    get:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.banks.get
+      tags:
+        - admin
+      summary: Retrieve specific bank info.
+      description: Retrieve specific bank info.
+      parameters:
+        - name: bankId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/BankCreate"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+    patch:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.banks.update
+      tags:
+        - admin
+      summary: Update Bank
+      description: Update Bank
+      parameters:
+        - name: bankId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/BankCreate"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
           $ref: "codes.yml#/response/default"
   /markets:
     get:
@@ -404,6 +609,14 @@ paths:
                 type: array
                 items:
                   $ref: "components.yml#/schemas/Market"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
   /members/winners:
     get:
       security: []
@@ -425,7 +638,9 @@ paths:
           $ref: "codes.yml#/response/400"
         "404":
           $ref: "codes.yml#/response/404"
-        default:
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
           $ref: "codes.yml#/response/default"
 
   /members/{memberId}:
@@ -451,18 +666,16 @@ paths:
             application/json:
               schema:
                 $ref: "components.yml#/schemas/Member"
+        "201":
+          $ref: "codes.yml#/response/201"
         "400":
-          description: Bad Request
-          content: {}
+          $ref: "codes.yml#/response/400"
         "404":
-          description: Member not found
-          content: {}
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "components.yml#/schemas/Error"
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
   /members/{memberId}/bets:
     get:
       security:
@@ -492,7 +705,9 @@ paths:
           $ref: "codes.yml#/response/400"
         "404":
           $ref: "codes.yml#/response/404"
-        default:
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
           $ref: "codes.yml#/response/default"
   /games/types:
     post:
@@ -509,7 +724,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: objects.yml#/requests/createGameType
+              $ref: "components.yml#/schemas/GameTypeCreate"
       responses:
         "201":
           $ref: "codes.yml#/response/201"
@@ -517,7 +732,11 @@ paths:
           $ref: "codes.yml#/response/400"
         "404":
           $ref: "codes.yml#/response/404"
-        default:
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
           $ref: "codes.yml#/response/default"
     get:
       security: []
@@ -539,8 +758,349 @@ paths:
           $ref: "codes.yml#/response/400"
         "404":
           $ref: "codes.yml#/response/404"
-        default:
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
           $ref: "codes.yml#/response/default"
+  /markets/{marketId}/games:
+    post:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.market.game.create
+      tags:
+        - admin
+      summary: Adds a new game to a market
+      description: Adds new Game to a Market
+      parameters:
+        - name: marketId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/GameCreate"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
+          $ref: "codes.yml#/response/default"
+    get:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.market.game.catalog
+      tags:
+        - admin
+      summary: Retrieves all games from a market
+      description: Retrieves all games from a market
+      parameters:
+        - name: marketId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Game"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /markets/{marketId}/games/{gameId}:
+    get:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.market.game.get
+      tags:
+        - admin
+      summary: Retrieves specific game info from a market
+      description: Retrieves specific game info from a market
+      parameters:
+        - name: marketId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/GameCreate"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+    patch:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.market.game.update
+      tags:
+        - admin
+      summary: Updates a game from a market
+      description: Updates a Game from a Market
+      parameters:
+        - name: marketId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/GameCreate"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /staff/banks/accounts:
+    post:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.bank.account.create
+      tags:
+        - admin
+      summary: Creates a new staff bank account
+      description: Creates a new staff bank account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/StaffBankAccount"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
+          $ref: "codes.yml#/response/default"
+    get:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.bank.account.create
+      tags:
+        - admin
+      summary: Retrieves a list of all the staff bank accounts
+      description: Retrieves a list of all the staff bank accounts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/StaffBankAccount"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /staff/banks/accounts/{accountId}:
+    get:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.bank.account.create
+      tags:
+        - admin
+      summary: Retrieves info for a specific staff bank account.
+      description: Retrieves info for a specific staff bank account.
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/StaffBankAccount"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+    patch:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.bank.account.create
+      tags:
+        - admin
+      summary: Updates info for a specific staff bank account.
+      description: Updates info for a specific staff bank account.
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/StaffBankAccount"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /transactions/:
+    get:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.transaction.catalog
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Transaction"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /transactions/{transactionId}:
+    patch:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.transaction.catalog
+      tags:
+        - admin
+      parameters:
+        - name: transactionId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/Transaction"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+    get:
+      security:
+        - Apikey: []
+          Token: []
+      operationId: admin.transaction.catalog
+      tags:
+        - admin
+      parameters:
+        - name: transactionId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Transaction"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+
 components:
   securitySchemes:
     Token:

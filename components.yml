@@ -114,22 +114,22 @@ schemas:
         example:
           xd:
             id: 1
-            type: xd
+            game_type: xd
             discount: 0.10
             fee: 0.0
           2df:
             id: 2
-            type: 2df
+            game_type: 2df
             discount: 0.0
             fee: 0.10
           2dm:
             id: 3
-            type: 2dm
+            game_type: 2dm
             discount: 0.0
             fee: 0.0
           free:
             id: 4
-            type: free
+            game_type: free
             discount: 0.05
             fee: 0.0
   Game:
@@ -137,12 +137,31 @@ schemas:
     properties:
       id:
         type: integer
-      type:
+      game_type:
         type: string
       discount:
         type: number
       fee:
         type: number
+  GameCreate:
+    allOf:
+      - $ref: "#/schemas/Game"
+      - type: object
+        properties:
+          win1x:
+            type: number
+          win2x:
+            type: number
+          win3x:
+            type: number
+          min_stake:
+            type: number
+          max_stake:
+            type: number
+          max_global_stake:
+            type: number
+          max_line:
+            type: number
   Ticket:
     type: object
     properties:
@@ -188,13 +207,74 @@ schemas:
   GameType:
     allOf:
       - $ref: "#/schemas/GameTypeCreate"
-      - $ref: "#/schemas/_Timestamp"
-  _Timestamp:
+      - $ref: "#/schemas/Common"
+  Staff:
     type: object
     properties:
-      created_at:
+      username:
+        type: string
+      password:
+        type: string
+      displayname:
+        type: string
+      role_id:
+        type: integer
+      _enabled:
+        type: boolean
+  StaffBankAccount:
+    type: object
+    properties:
+      bank_id:
+        type: integer
+      staff_id:
+        type: integer
+      account_holder:
+        type: string
+      available:
+        type: number
+      _enabled:
+        type: boolean
+  TransactionCreate:
+    type: object
+    properties:
+      amount:
+        type: number
+      type:
+        type: string
+        enum:
+          - deposit
+          - withdraw
+  Transaction:
+    allOf:
+      - $ref: "#/schemas/TransactionCreate"
+      - type: object
+        properties:
+          member_id:
+            type: integer
+            format: int64
+          member_username:
+            type: string
+          request:
+            type: string
+            format: date-time
+          process:
+            type: string
+            format: date-time
+          status:
+            type: string
+            enum:
+              - accepted
+              - rejected
+              - mistake
+      - $ref: "#/schemas/Common"
+  Common:
+    type: object
+    properties:
+      _enabled:
+        type: boolean
+      _created_at:
         type: string
         format: date-time
-      updated_at:
+      _updated_at:
         type: string
         format: date-time
