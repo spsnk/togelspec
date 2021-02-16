@@ -263,10 +263,27 @@ schemas:
           status:
             type: string
             enum:
+              - unprocessed
               - accepted
               - rejected
               - mistake
       - $ref: "#/schemas/Common"
+
+  TransactionPagination:
+    type: object
+    properties:
+      meta:
+        type: object
+        properties:
+          total_pages:
+            type: integer
+          total_records:
+            type: integer
+      data:
+        type: array
+        items:
+          $ref: "#/schemas/Transaction"
+
   Common:
     type: object
     properties:

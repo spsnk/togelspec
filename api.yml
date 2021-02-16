@@ -47,7 +47,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.5.0
+  version: 1.5.1
 servers:
   - url: https://togel.pridosandbox.com/api
     description: Staging environment.
@@ -454,6 +454,8 @@ paths:
       security:
         - Token: []
       operationId: member.transaction
+      summary: Create a new deposit/withdraw request.
+      description: Create a new deposit/withdraw request.
       tags:
         - member
       requestBody:
@@ -1022,17 +1024,38 @@ paths:
         - Apikey: []
           Token: []
       operationId: admin.transaction.catalog
+      summary: List all transactions.
+      description: List all transactions by default, includes pagination and query size.
       tags:
         - admin
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 25
+        - name: q
+          in: query
+          description: Query on Lucene syntax. See <https://lucene.apache.org/core/2_9_4/queryparsersyntax.html>
+          required: false
+          schema:
+            type: string
+            format: json
+            example: "status:unprocessed"
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "components.yml#/schemas/Transaction"
+                $ref: "components.yml#/schemas/TransactionPagination"
         "400":
           $ref: "codes.yml#/response/400"
         "404":
@@ -1047,6 +1070,8 @@ paths:
         - Apikey: []
           Token: []
       operationId: admin.transaction.update
+      summary: Update a given transaction.
+      description: Update a given transaction.
       tags:
         - admin
       parameters:
@@ -1077,6 +1102,8 @@ paths:
         - Apikey: []
           Token: []
       operationId: admin.transaction.get
+      summary: Get Specific transaction Data.
+      description: Get Specific transaction Data.
       tags:
         - admin
       parameters:
