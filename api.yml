@@ -66,7 +66,7 @@ tags:
   #     These endpoints are to be called by non authenthicated users.
   - name: member
     description: Member operations, related to logged in user.
-      Should always use a Bearer token for authorization. Such token contains user information, like member_id, username and status.
+      Some endpoints use a Bearer token for authorization. Such token contains user information, like member_id, username and status.
   - name: admin
     description: Administration operations
   - name: togel
