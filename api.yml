@@ -61,9 +61,9 @@ externalDocs:
 tags:
   - name: catalog
     description: Catalogs. No security.
-  - name: account
-    description: Account operations, register new member, enroll and verify.
-      These endpoints are to be called by non authenthicated users.
+  # - name: account
+  #   description: Account operations, register new member, enroll and verify.
+  #     These endpoints are to be called by non authenthicated users.
   - name: member
     description: Member operations, related to logged in user.
       Should always use a Bearer token for authorization. Such token contains user information, like member_id, username and status.
@@ -74,12 +74,12 @@ tags:
 security:
   - Token: []
 paths:
-  /members/login:
+  /member/login:
     post:
       security: []
       operationId: member.login
       tags:
-        - account
+        - member
       summary: Login action for member
       description: Logs in the user and returns an authorization token.
       requestBody:
@@ -103,13 +103,13 @@ paths:
           $ref: "codes.yml#/response/405"
         "422":
           $ref: "codes.yml#/response/default"
-  /members/logout:
+  /member/logout:
     post:
       security:
         - Token: []
       operationId: member.logout
       tags:
-        - account
+        - member
       summary: Logout action for member
       description: Logs out the member and revokes the previous auth token.
       responses:
@@ -286,12 +286,12 @@ paths:
           $ref: "codes.yml#/response/409"
         "422":
           $ref: "codes.yml#/response/default"
-  /members:
+  /member:
     post:
       security: []
       operationId: member.create
       tags:
-        - account
+        - member
       summary: Enroll a new member
       description: Registers a new member in the system.
         Sends email with verification code.
@@ -356,12 +356,12 @@ paths:
           $ref: "codes.yml#/response/405"
         "422":
           $ref: "codes.yml#/response/default"
-  /members/{memberId}/verify/{code}:
+  /member/{memberId}/verify/{code}:
     get:
       security: []
       operationId: member.verify
       tags:
-        - account
+        - member
       summary: Verify a member with special code.
       description: Confirm a member given a verification code.
       parameters:
@@ -388,7 +388,7 @@ paths:
           $ref: "codes.yml#/response/405"
         "422":
           $ref: "codes.yml#/response/default"
-  /members/bets:
+  /member/bets:
     get:
       operationId: member.bet.history
       tags:
@@ -449,7 +449,7 @@ paths:
           $ref: "codes.yml#/response/409"
         "422":
           $ref: "codes.yml#/response/default"
-  /members/transactions:
+  /member/transactions:
     post:
       security:
         - Token: []
