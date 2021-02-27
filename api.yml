@@ -47,7 +47,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.5.1
+  version: 1.6.0
 servers:
   - url: https://togel.pridosandbox.com/api
     description: Staging environment.
@@ -476,7 +476,7 @@ paths:
           $ref: "codes.yml#/response/409"
         "422":
           $ref: "codes.yml#/response/default"
-  /banks:
+  /catalogs/banks:
     post:
       security:
         - Apikey: []
@@ -594,7 +594,7 @@ paths:
           $ref: "codes.yml#/response/409"
         "422":
           $ref: "codes.yml#/response/default"
-  /markets:
+  /catalogs/markets:
     get:
       security: []
       operationId: catalog.markets
@@ -610,7 +610,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "components.yml#/schemas/Market"
+                  $ref: "components.yml#/schemas/MarketGame"
         "400":
           $ref: "codes.yml#/response/400"
         "404":
@@ -619,7 +619,7 @@ paths:
           $ref: "codes.yml#/response/405"
         "422":
           $ref: "codes.yml#/response/default"
-  /members/winners:
+  /catalogs/members/winners:
     get:
       security: []
       operationId: member.winners.get
@@ -711,6 +711,31 @@ paths:
           $ref: "codes.yml#/response/405"
         "422":
           $ref: "codes.yml#/response/default"
+  /catalogs/games:
+    get:
+      security: []
+      operationId: catalogs.game
+      tags:
+        - catalog
+      summary: Retrieve the available games.
+      description: Returns a list of available game types.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/GameType"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
   /games/types:
     post:
       security:
@@ -741,10 +766,12 @@ paths:
         "422":
           $ref: "codes.yml#/response/default"
     get:
-      security: []
-      operationId: catalogs.game.types
+      security:
+        - Token: []
+          Apikey: []
+      operationId: admin.game.types
       tags:
-        - catalog
+        - admin
       summary: Retrieve the available games.
       description: Returns a list of available markets with the available game types for displaying on frontend. Cache this response for a week.
       responses:
@@ -756,6 +783,128 @@ paths:
                 type: array
                 items:
                   $ref: "components.yml#/schemas/GameType"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /markets:
+    post:
+      security:
+        - Token: []
+          Apikey: []
+      operationId: admin.markets.create
+      tags:
+        - admin
+      summary: Creates new market
+      description: Creates new market
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/Market"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+    get:
+      security:
+        - Token: []
+          Apikey: []
+      operationId: admin.markets.readAll
+      tags:
+        - admin
+      summary: Retrieve the available markets.
+      description: Returns a list of available markets.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Market"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+  /markets/{marketId}:
+    get:
+      security:
+        - Token: []
+          Apikey: []
+      operationId: admin.markets.read
+      tags:
+        - admin
+      summary: Retrieve a specific market
+      description: Returns a specific market based on id
+      parameters:
+        - name: marketId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/Market"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+    patch:
+      security:
+        - Token: []
+          Apikey: []
+      operationId: admin.markets.update
+      tags:
+        - admin
+      summary: Update a market
+      description: Update a market given an id
+      parameters:
+        - name: marketId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/Market"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "components.yml#/schemas/Market"
         "400":
           $ref: "codes.yml#/response/400"
         "404":

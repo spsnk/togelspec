@@ -87,7 +87,7 @@ schemas:
         type: string
       bank_shortname:
         type: string
-  Market:
+  MarketGame:
     type: object
     properties:
       id:
@@ -132,6 +132,38 @@ schemas:
             game_type: free
             discount: 0.05
             fee: 0.0
+  Market:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      shortname:
+        type: string
+      url:
+        type: string
+      opendays:
+        type: integer
+      close:
+        type: string
+        format: date-time
+      draw:
+        type: string
+        format: date-time
+      auto:
+        type: boolean
+      ratio:
+        type: number
+      enabled:
+        type: boolean
+    required:
+      - name
+      - shortname
+      - url
+      - opendays
+      - close
+      - draw
   Game:
     type: object
     properties:
