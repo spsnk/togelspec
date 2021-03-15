@@ -47,7 +47,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.6.0
+  version: 1.7.0
 servers:
   - url: https://togel.pridosandbox.com/api
     description: Staging environment.
@@ -625,8 +625,23 @@ paths:
       operationId: member.winners.get
       tags:
         - catalog
-      summary: Retrieve latest winnerss
-      description: Retrieve latest winners
+      summary: Retrieve latest winners
+      description: Retrieve latest winners by default last 10 days, optional query strings for start and end range.
+      parameters:
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+            default: "2021-03-15"
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+            default: "2021-03-15"
       responses:
         "200":
           description: OK
@@ -635,7 +650,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "components.yml#/schemas/Member"
+                  $ref: "components.yml#/schemas/Winner"
         "400":
           $ref: "codes.yml#/response/400"
         "404":

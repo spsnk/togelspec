@@ -6,6 +6,7 @@ schemas:
         type: integer
       message:
         type: string
+
   Member:
     type: object
     properties:
@@ -41,6 +42,29 @@ schemas:
         type: string
       referral:
         type: string
+
+  Winner:
+    type: object
+    properties:
+      member_id:
+        type: number
+      member_name:
+        type: string
+      member_username:
+        type: string
+      market_id:
+        type: number
+      market_name:
+        type: string
+      market_shortname:
+        type: string
+
+      amount_won:
+        type: number
+      date:
+        type: string
+        format: date-time
+
   MemberCreate:
     type: object
     required:
