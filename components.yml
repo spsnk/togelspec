@@ -324,7 +324,42 @@ schemas:
               - rejected
               - mistake
       - $ref: "#/schemas/Common"
-
+  RoundCreate:
+    type: object
+    properties:
+      market_id:
+        type: integer
+      datetime:
+        type: string
+        format: datetime
+      number:
+        type: string
+  Round:
+    type: object
+    properties:
+      round_id:
+        type: integer
+      market_id:
+        type: integer
+      datetime:
+        type: string
+        format: datetime
+      number:
+        type: string
+  RoundPagination:
+    type: object
+    properties:
+      meta:
+        type: object
+        properties:
+          total_pages:
+            type: integer
+          total_records:
+            type: integer
+      data:
+        type: array
+        items:
+          $ref: "#/schemas/Round"
   TransactionPagination:
     type: object
     properties:
@@ -351,3 +386,27 @@ schemas:
       _updated_at:
         type: string
         format: date-time
+
+parameters:
+  Page:
+    name: page
+    in: query
+    required: false
+    schema:
+      type: integer
+      example: 1
+  Size:
+    name: size
+    in: query
+    required: false
+    schema:
+      type: integer
+  Query:
+    name: q
+    in: query
+    description: Query on Lucene syntax. See <https://lucene.apache.org/core/2_9_4/queryparsersyntax.html>
+    required: false
+    schema:
+      type: string
+      format: json
+      example: "status:unprocessed"

@@ -928,6 +928,75 @@ paths:
           $ref: "codes.yml#/response/405"
         "422":
           $ref: "codes.yml#/response/default"
+
+  /markets/{marketId}/rounds:
+    post:
+      security:
+        - Token: []
+          Apikey: []
+      operationId: admin.markets.round.create
+      tags:
+        - admin
+      summary: Submits a new round
+      description: Submits a new round to a specific market. Should process winners, deduct credit balances accordingly.
+      parameters:
+        - name: marketId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "components.yml#/schemas/RoundCreate"
+      responses:
+        "201":
+          $ref: "codes.yml#/response/201"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "409":
+          $ref: "codes.yml#/response/409"
+        "422":
+          $ref: "codes.yml#/response/default"
+    get:
+      security:
+        - Token: []
+          Apikey: []
+      operationId: admin.markets.round.readall
+      tags:
+        - admin
+      summary: Gets rounds for a specific market
+      description: Gets paginated Rounds for a specific market.
+      parameters:
+        - name: marketId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: "components.yml#/parameters/Page"
+        - $ref: "components.yml#/parameters/Size"
+        - $ref: "components.yml#/parameters/Query"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/schemas/RoundPagination"
+        "400":
+          $ref: "codes.yml#/response/400"
+        "404":
+          $ref: "codes.yml#/response/404"
+        "405":
+          $ref: "codes.yml#/response/405"
+        "422":
+          $ref: "codes.yml#/response/default"
+
   /markets/{marketId}/games:
     post:
       security:
@@ -1193,26 +1262,9 @@ paths:
       tags:
         - admin
       parameters:
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            example: 1
-        - name: size
-          in: query
-          required: false
-          schema:
-            type: integer
-            example: 25
-        - name: q
-          in: query
-          description: Query on Lucene syntax. See <https://lucene.apache.org/core/2_9_4/queryparsersyntax.html>
-          required: false
-          schema:
-            type: string
-            format: json
-            example: "status:unprocessed"
+        - $ref: "components.yml#/parameters/Page"
+        - $ref: "components.yml#/parameters/Size"
+        - $ref: "components.yml#/parameters/Query"
       responses:
         "200":
           description: OK
